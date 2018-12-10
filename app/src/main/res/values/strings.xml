@@ -20,4 +20,6 @@
     <string name="button_register">register</string>
     <string name="email">email</string>
     <string name="password">password</string>
+    <string name="login_error">Login error</string>
+    <string name="login_success">Login success</string>
 </resources>
