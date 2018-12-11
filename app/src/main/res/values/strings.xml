@@ -22,4 +22,6 @@
     <string name="password">password</string>
     <string name="login_error">Login error</string>
     <string name="login_success">Login success</string>
+    <string name="number_phone">number phone</string>
+    <string name="button_registerdue">Register</string>
 </resources>

@@ -1,9 +1,9 @@
 package com.example.marce.primaapp;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -19,6 +19,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
     Button loginBtn;
     Button registerBtn;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,6 +27,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
 
         emailET = findViewById(R.id.email_et);
         passwordET = findViewById(R.id.password_et);
+
 
         loginBtn = findViewById(R.id.login_btn);
         registerBtn = findViewById(R.id.register_btn);
@@ -71,5 +73,9 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
             }else{
                 showErrorMessage();
               }
+              else if (v.getId() == R.id.register_btn){
+            Intent i = new Intent(MainActivity.this, RegisterActivity.class);
+            startActivity(i);
+        }
     }
 }
