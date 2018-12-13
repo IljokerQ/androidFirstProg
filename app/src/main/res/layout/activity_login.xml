@@ -3,7 +3,9 @@
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
-    android:padding="20dp">
+    android:padding="20dp"
+    android:id="@+id/sfondo"
+    >
     <EditText
 
         android:layout_width="match_parent"
@@ -37,4 +39,19 @@
         android:id="@+id/register_btn"
         android:text="@string/button_register"/>
 </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="bottom">
+
+        <Switch
+            android:id="@+id/color_mode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:showText="false"
+            android:background="@color/color_dark"
+            />
+    </LinearLayout>
+
 </LinearLayout>
