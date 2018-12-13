@@ -1,7 +1,10 @@
 package com.example.marce.primaapp;
 
 
+import android.content.Context;
 import android.content.Intent;
+
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -30,6 +33,9 @@ public class MainActivity extends AppCompatActivity implements OnClickListener,C
 
     Switch colorMode;
 
+    SharedPreferences s;
+    SharedPreferences.Editor editor;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +59,11 @@ public class MainActivity extends AppCompatActivity implements OnClickListener,C
 
         Log.i(TAG, "activity created");
 
+        s = getPreferences(Context.MODE_PRIVATE);
+        editor = s.edit();
+
+
+        sfondo.setBackgroundColor(getResources().getColor( s.getInt("current color", 0)));
     }
 
     private boolean isValidEmail() {
@@ -102,10 +113,15 @@ public class MainActivity extends AppCompatActivity implements OnClickListener,C
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
         if (isChecked) {
+
             sfondo.setBackgroundColor(getResources().getColor(R.color.color_dark));
+            editor.putInt("current color", R.color.color_dark);
+            editor.commit();
         } else {
             sfondo.setBackgroundColor(getResources().getColor(R.color.color_light));
+            editor.putInt("current color", R.color.color_light);
+           editor.commit();
+            }
 
-        }
     }
 }
