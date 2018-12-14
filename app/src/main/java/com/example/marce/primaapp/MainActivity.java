@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener,C
     SharedPreferences s;
     SharedPreferences.Editor editor;
 
+    String CURRENT_COLOR;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,8 +63,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener,C
         s = getPreferences(Context.MODE_PRIVATE);
         editor = s.edit();
 
-
-        sfondo.setBackgroundColor(getResources().getColor( s.getInt("current color", 0)));
+        colorMode.setChecked(s.getBoolean(CURRENT_COLOR,false));
     }
 
     private boolean isValidEmail() {
@@ -115,12 +115,13 @@ public class MainActivity extends AppCompatActivity implements OnClickListener,C
         if (isChecked) {
 
             sfondo.setBackgroundColor(getResources().getColor(R.color.color_dark));
-            editor.putInt("current color", R.color.color_dark);
+
+            editor.putBoolean(CURRENT_COLOR, isChecked);
             editor.commit();
         } else {
             sfondo.setBackgroundColor(getResources().getColor(R.color.color_light));
-            editor.putInt("current color", R.color.color_light);
-           editor.commit();
+            editor.putBoolean(CURRENT_COLOR, isChecked);
+            editor.commit();
             }
 
     }
