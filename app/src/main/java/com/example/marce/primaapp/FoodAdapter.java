@@ -17,6 +17,20 @@ public class FoodAdapter extends RecyclerView.Adapter {
     private ArrayList<Food> data;
 
 
+
+    private OnQuantityChange onQuantityChange;
+
+
+    public interface OnQuantityChange{
+        public void onItemAdded(float price);
+        public void onItemRemoved(float price);
+    }
+
+    public void setOnQuantityChange(OnQuantityChange onQuantityChange) {
+        this.onQuantityChange = onQuantityChange;
+    }
+
+
     public  FoodAdapter(Context context, ArrayList<Food> data){
         this.data=data;
         mInflater = LayoutInflater.from(context);
@@ -25,7 +39,6 @@ public class FoodAdapter extends RecyclerView.Adapter {
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View v = mInflater.inflate(R.layout.row_item,viewGroup,false);
-
         return new FoodViewHolder(v);
     }
 
@@ -33,14 +46,15 @@ public class FoodAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
         FoodViewHolder foodViewHolder = (FoodViewHolder)viewHolder;
         foodViewHolder.productName.setText(data.get(i).getNameProductor());
-        foodViewHolder.productPrice.setText(data.get(i).getPrice());
-
+        foodViewHolder.productPrice.setText(toString().valueOf(data.get(i).getPrice()));
+        foodViewHolder.productQuantity.setText(toString().valueOf(data.get(i).getQuantity()));
 
     }
 
     @Override
     public int getItemCount() {
         return data.size();
+
     }
 
     public class FoodViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -64,7 +78,19 @@ public class FoodAdapter extends RecyclerView.Adapter {
 
         @Override
         public void onClick(View v) {
+            if(v.getId() == R.id.increase){
+                Food food = data.get(getAdapterPosition());
+                food.incrementQuantity();
+                notifyItemChanged(getAdapterPosition());
 
+                onQuantityChange.onItemAdded(food.getPrice());
+            }else if (v.getId() == R.id.decrease){
+                Food food = data.get(getAdapterPosition());
+                food.decrementQuantity();
+                notifyItemChanged(getAdapterPosition());
+
+                onQuantityChange.onItemRemoved(food.getPrice());
+            }
         }
     }
 }

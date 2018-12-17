@@ -1,31 +1,51 @@
 package com.example.marce.primaapp;
 
 public class Food {
+
     private String nameProductor;
+    private int quantity = 0;
+    private float price;
 
-    private String price;
 
-
-
-    public Food(String nameProductor,String price){
+    public Food(String nameProductor,float price){
         this.nameProductor = nameProductor;
-
         this.price = price;
     }
-    public void setNameProductor(String name){
-        this.nameProductor = name;
 
-    }
-    public String getNameProductor(){
+
+
+    public String getNameProductor() {
         return nameProductor;
     }
 
-    public void setPrice(String p){
-        this.price=p;
+    public void setNameProductor(String nameProductor) {
+        this.nameProductor = nameProductor;
     }
-    public String getPrice(){
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void incrementQuantity() {
+        this.quantity++;
+    }
+    public void decrementQuantity() {
+        if(quantity == 0) return;
+        this.quantity--;
+    }
+
+    public float getPrice() {
         return price;
     }
+
+    public void setPrice(float price) {
+        this.price = price;
+    }
+
+
+
+
+
 
 }
 

@@ -12,9 +12,9 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class WelcomeActivity extends AppCompatActivity implements View.OnClickListener {
+public class WelcomeActivity extends AppCompatActivity implements View.OnClickListener, FoodAdapter.OnQuantityChange {
     private static final String TAG = "WelcomeActivity";
-    TextView emailTV;
+    TextView emailTV, total;
 
     String email, openedEmail;
 
@@ -22,6 +22,9 @@ public class WelcomeActivity extends AppCompatActivity implements View.OnClickLi
 
     LinearLayoutManager layoutManager;
     FoodAdapter adapter;
+
+    float totale;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -31,17 +34,14 @@ public class WelcomeActivity extends AppCompatActivity implements View.OnClickLi
         emailTV.setOnClickListener(this);
         emailTV.setText(getIntent().getStringExtra("benvenuto"));
 
-        recyclerView = findViewById(R.id.food_RW);
 
+        recyclerView = findViewById(R.id.food_RW);
+        total = findViewById(R.id.total);
         layoutManager = new LinearLayoutManager(this);
 
-        ArrayList<Food> foodAd = new ArrayList<>();
 
-        foodAd.add(new Food("milk","1,2"));
-
-        foodAd.add(new Food("potato","3,5"));
-
-        adapter = new FoodAdapter(this,foodAd);
+        adapter = new FoodAdapter(this,getProducts());
+        adapter.setOnQuantityChange(this);
 
 
         recyclerView.setLayoutManager(layoutManager);
@@ -67,5 +67,28 @@ public class WelcomeActivity extends AppCompatActivity implements View.OnClickLi
                     "mailto",getIntent().getStringExtra("benvenuto"), null));
             startActivity(Intent.createChooser(i, "Choose an Email client :"));
         }
+    }
+    private ArrayList<Food> getProducts(){
+
+        ArrayList<Food> foodAd = new ArrayList<>();
+
+        foodAd.add(new Food("milk",1.2f));
+
+        foodAd.add(new Food("potato",3.5f));
+        return foodAd;
+    }
+
+    @Override
+    public void onItemAdded(float price) {
+        totale += price;
+        total.setText(toString().valueOf(totale));
+    }
+
+    @Override
+    public void onItemRemoved(float price) {
+        if (totale == 0) return;
+        totale -= price;
+        total.setText(toString().valueOf(totale));
+
     }
 }
