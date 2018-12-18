@@ -6,11 +6,23 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -50,13 +62,14 @@ public class WelcomeActivity extends AppCompatActivity implements View.OnClickLi
         progressBar.setMax(5);
         progressBar.setProgress(0);
 
-        adapter = new FoodAdapter(this,getProducts());
+        adapter = new FoodAdapter(this);
         adapter.setOnQuantityChange(this);
 
 
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
 
+        getProducts();
 
         if (getIntent().getStringExtra("EMAIL") != null){
 
@@ -84,31 +97,62 @@ public class WelcomeActivity extends AppCompatActivity implements View.OnClickLi
             startActivity(Intent.createChooser(i, "Choose an Email client :"));
         }
     }
-    private ArrayList<Food> getProducts(){
+    private void getProducts(){
 
-        ArrayList<Food> foodAd = new ArrayList<>();
 
-        foodAd.add(new Food("milk",1.2f));
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String url ="http://5ba19290ee710f0014dd764c.mockapi.io/Food#";
 
-        foodAd.add(new Food("potato",3.5f));
-        return foodAd;
+
+        StringRequest stringRequest = new StringRequest(
+                Request.Method.GET,
+                url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                       Log.d("success", response);
+                        try {
+                            JSONObject responseJSON = new JSONObject(response);
+                            JSONArray jsonArray = responseJSON.getJSONArray("foods");
+                            ArrayList<Food> foodArrayList = new ArrayList<>();
+                            for (int i =0 ; i<jsonArray.length();i++){
+                                Food food = new Food(jsonArray.getJSONObject(i));
+                                foodArrayList.add(food);
+                            }
+                            adapter.setData(foodArrayList);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                Log.d("error", error.getMessage());
+            }
+        });
+
+
+        queue.add(stringRequest);
     }
 
     @Override
     public void onItemAdded(float price) {
         totale += price;
+        progressBar.setProgress(totale);
         total.setText(String.valueOf(totale));
         enableBuy();
-        progressBar.setProgress(totale);
+
     }
 
     @Override
     public void onItemRemoved(float price) {
         if (totale == 0) return;
         totale -= price;
+        progressBar.setProgress(totale);
         total.setText(String.valueOf(totale));
         enableBuy();
-        progressBar.setProgress(totale);
+
 
     }
 }

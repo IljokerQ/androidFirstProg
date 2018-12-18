@@ -1,5 +1,9 @@
 package com.example.marce.primaapp;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class Food {
 
     private String nameProductor;
@@ -43,7 +47,11 @@ public class Food {
     }
 
 
+    public Food(JSONObject jsonFood) throws JSONException {
 
+        this.nameProductor = jsonFood.getString("name");
+        this.price = jsonFood.getInt("price");
+            }
 
 
 

@@ -14,11 +14,16 @@ import java.util.ArrayList;
 public class FoodAdapter extends RecyclerView.Adapter {
 
     private LayoutInflater mInflater;
-    private ArrayList<Food> data;
+    private ArrayList<Food> data = new ArrayList<>();
 
 
 
     private OnQuantityChange onQuantityChange;
+
+    public void setData(ArrayList<Food> foodArrayList) {
+        this.data = foodArrayList;
+        notifyDataSetChanged();
+    }
 
 
     public interface OnQuantityChange{
@@ -34,6 +39,9 @@ public class FoodAdapter extends RecyclerView.Adapter {
     public  FoodAdapter(Context context, ArrayList<Food> data){
         this.data=data;
         mInflater = LayoutInflater.from(context);
+    }
+    public FoodAdapter(Context context){
+        mInflater= LayoutInflater.from(context);
     }
     @NonNull
     @Override
