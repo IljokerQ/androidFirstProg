@@ -7,7 +7,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -23,8 +25,13 @@ public class WelcomeActivity extends AppCompatActivity implements View.OnClickLi
     LinearLayoutManager layoutManager;
     FoodAdapter adapter;
 
-    float totale;
+    Button buy;
 
+    ProgressBar progressBar;
+
+    int totale;
+
+    int progress= 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -34,11 +41,14 @@ public class WelcomeActivity extends AppCompatActivity implements View.OnClickLi
         emailTV.setOnClickListener(this);
         emailTV.setText(getIntent().getStringExtra("benvenuto"));
 
-
+        progressBar = findViewById(R.id.determinateBar);
+        buy = findViewById(R.id.buy_btn);
         recyclerView = findViewById(R.id.food_RW);
         total = findViewById(R.id.total);
         layoutManager = new LinearLayoutManager(this);
 
+        progressBar.setMax(5);
+        progressBar.setProgress(0);
 
         adapter = new FoodAdapter(this,getProducts());
         adapter.setOnQuantityChange(this);
@@ -59,6 +69,12 @@ public class WelcomeActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
+
+    public void enableBuy(){
+        buy.setEnabled(totale > 5);
+
+
+    }
 
     @Override
     public void onClick(View v) {
@@ -81,14 +97,18 @@ public class WelcomeActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onItemAdded(float price) {
         totale += price;
-        total.setText(toString().valueOf(totale));
+        total.setText(String.valueOf(totale));
+        enableBuy();
+        progressBar.setProgress(totale);
     }
 
     @Override
     public void onItemRemoved(float price) {
         if (totale == 0) return;
         totale -= price;
-        total.setText(toString().valueOf(totale));
+        total.setText(String.valueOf(totale));
+        enableBuy();
+        progressBar.setProgress(totale);
 
     }
 }
