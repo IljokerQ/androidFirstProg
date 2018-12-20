@@ -9,6 +9,7 @@ public class Food {
     private String nameProductor;
     private int quantity = 0;
     private float price;
+    boolean available;
 
 
     public Food(String nameProductor,float price){
@@ -51,6 +52,7 @@ public class Food {
 
         this.nameProductor = jsonFood.getString("name");
         this.price = jsonFood.getInt("price");
+        this.available =jsonFood.getBoolean("available");
             }
 
 

@@ -39,7 +39,7 @@ public class WelcomeActivity extends AppCompatActivity implements View.OnClickLi
 
     Button buy;
 
-    ProgressBar progressBar;
+    ProgressBar progressBar, loading;
 
     int totale;
 
@@ -52,6 +52,7 @@ public class WelcomeActivity extends AppCompatActivity implements View.OnClickLi
         emailTV = findViewById(R.id.tv_benvenuto);
         emailTV.setOnClickListener(this);
         emailTV.setText(getIntent().getStringExtra("benvenuto"));
+        loading = findViewById(R.id.loading);
 
         progressBar = findViewById(R.id.determinateBar);
         buy = findViewById(R.id.buy_btn);
@@ -112,23 +113,27 @@ public class WelcomeActivity extends AppCompatActivity implements View.OnClickLi
                     public void onResponse(String response) {
                        Log.d("success", response);
                         try {
-                            JSONObject responseJSON = new JSONObject(response);
-                            JSONArray jsonArray = responseJSON.getJSONArray("foods");
+
+                            JSONArray responseJSON = new JSONArray(response);
                             ArrayList<Food> foodArrayList = new ArrayList<>();
-                            for (int i =0 ; i<jsonArray.length();i++){
-                                Food food = new Food(jsonArray.getJSONObject(i));
+                            for (int i =0 ; i<responseJSON.length();i++){
+
+                                Food food = new Food(responseJSON.getJSONObject(i));
+                                if(!food.available) continue;
                                 foodArrayList.add(food);
                             }
                             adapter.setData(foodArrayList);
+                            loading.setVisibility(View.GONE);
                         } catch (JSONException e) {
                             e.printStackTrace();
+
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
                 Log.d("error", error.getMessage());
+                loading.setVisibility(View.GONE);
             }
         });
 
